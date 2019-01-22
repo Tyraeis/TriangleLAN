@@ -21,9 +21,11 @@ def is_admin():
 def make_shortcut(target, dest, icon=None):
 	if icon is None:
 		icon = target
+	
+	dir = os.path.dirname(target)
 
 	# See http://www.optimumx.com/downloads.html#Shortcut for more info about shortcut.exe
-	subprocess.run([shortcut, '/f:'+dest, '/a:c', '/t:'+target, '/i:'+icon, '/w:'+target])
+	subprocess.run([shortcut, '/f:'+dest, '/a:c', '/t:'+target, '/i:'+icon, '/w:'+dir])
 
 def unzip(archive, dest):
 	subprocess.run([unzipper, 'x', archive, '-o'+dest, '-y'])
@@ -59,7 +61,7 @@ def install(game_name):
 	# check for icon override
 	icon = None
 	if 'icon' in config:
-		icon = config['icon']
+		icon = j(games_folder, config['icon'])
 
 	# create shortcut to game executable
 	make_shortcut(j(games_folder, config['exe']), j(desktop, game_name+'.lnk'), icon)

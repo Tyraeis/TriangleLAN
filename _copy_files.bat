@@ -1,4 +1,5 @@
+@echo off
 cd %~dp0
-xcopy TriangleLAN %USERPROFILE%\Desktop\TriangleLAN
-xcopy TriangleLAN\python %USERPROFILE%\Desktop\TriangleLAN\python /s
-xcopy TriangleLAN\tools %USERPROFILE%\Desktop\TriangleLAN\tools
+xcopy TriangleLAN "%USERPROFILE%\Desktop\TriangleLAN" /i
+xcopy TriangleLAN\python "%USERPROFILE%\Desktop\TriangleLAN\python" /s /i
+xcopy TriangleLAN\tools "%USERPROFILE%\Desktop\TriangleLAN\tools" /i

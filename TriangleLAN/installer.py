@@ -45,7 +45,10 @@ def uninstall():
 	# Delete all created shortcuts
 	for item in os.scandir(archives_folder):
 		if item.is_dir():
-			os.remove(j(desktop, item.name+'.lnk'))
+			try:
+				os.remove(j(desktop, item.name+'.lnk'))
+			except FileNotFoundError:
+				pass # os.remove can error if the file does not exist, which obviously is fine with me
 	# Use uninstaller bat file to delete the TriangleLAN folder
 	shutil.copyfile(uninstaller, j(root, 'uninstall.bat'))
 	subprocess.Popen([j(root, 'uninstall.bat')])
