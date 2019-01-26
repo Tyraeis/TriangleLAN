@@ -22,10 +22,11 @@ def make_shortcut(target, dest, icon=None):
 	if icon is None:
 		icon = target
 	
-	dir = os.path.dirname(target)
+	wdir = os.path.dirname(target)
 
 	# See http://www.optimumx.com/downloads.html#Shortcut for more info about shortcut.exe
-	subprocess.run([shortcut, '/f:'+dest, '/a:c', '/t:'+target, '/i:'+icon, '/w:'+dir])
+	# Call shortcut.exe without any arguments to see help
+	subprocess.run([shortcut, '/f:'+dest, '/a:c', '/t:'+target, '/i:'+icon, '/w:'+wdir])
 
 def unzip(archive, dest):
 	subprocess.run([unzipper, 'x', archive, '-o'+dest, '-y'])
