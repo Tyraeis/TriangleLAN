@@ -1,2 +1,2 @@
 cd %~dp0
-"python/python.exe" installer.py --uninstall
+"python/python.exe" trianglelan.py --uninstall
