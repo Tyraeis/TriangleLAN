@@ -28,6 +28,27 @@ def make_shortcut(target, dest, icon=None):
 	# Call shortcut.exe without any arguments to see help
 	subprocess.run([shortcut, '/f:'+dest, '/a:c', '/t:'+target, '/i:'+icon, '/w:'+wdir])
 
+# Creates a shortcut to an executable based on an executable definition
+# An executable definition can be either:
+#   A string, in which case the string is interpreted as a path to the executable, the shortcut name is the game name, and the shortcut icon is taken from the executable
+#   A dictionary containing the executable path and optional overrides for the shortcut name and icon
+def make_exe(game_name, exe_def):
+	if isinstance(exe_def, str):
+		make_shortcut(j(games_folder, exe_def), j(desktop, game_name+'.lnk'), None)
+	else:
+		# Check for shortcut name override
+		name = game_name
+		if 'name' in exe_def:
+			name = exe_def['name']
+
+		# Check for shortcut icon override
+		icon = None
+		if 'icon' in exe_def:
+			icon = j(games_folder, exe_def['icon'])
+		
+		# Make shortcut
+		make_shortcut(j(games_folder, exe_def['path']), j(desktop, name+'.lnk'), icon)
+
 def unzip(archive, dest):
 	subprocess.run([unzipper, 'x', archive, '-o'+dest, '-y'])
 
@@ -59,13 +80,13 @@ def install(game_name):
 	if 'post_script' in config:
 		subprocess.run([config['post_script'], src_folder])
 
-	# check for icon override
-	icon = None
-	if 'icon' in config:
-		icon = j(games_folder, config['icon'])
-
-	# create shortcut to game executable
-	make_shortcut(j(games_folder, config['exe']), j(desktop, game_name+'.lnk'), icon)
+	# create shortcut(s) to game executable(s)
+	if 'exe' in config:
+		make_exe(game_name, config['exe'])
+	
+	if 'exes' in config:
+		for name, exe in config['exes'].items():
+			make_exe(name, exe)
 
 
 if __name__ == '__main__':

@@ -31,15 +31,30 @@ def install_all():
 		if item.is_dir():
 			install(item.name)
 
+# Removes all traces of each game and the installer itself
 def uninstall():
-	# This should remove all traces of each game and the installer itself
+	# Removes a shortcut without throwing errors when the shortcut doesn't exist
+	def safe_remove_shortcut(shortcut_name):
+		try:
+			os.remove(j(desktop, shortcut_name+'.lnk'))
+		except FileNotFoundError:
+			pass # os.remove can error if the file does not exist, which is obviously not a problem
+
 	# Delete all created shortcuts
 	for item in os.scandir(archives_folder):
 		if item.is_dir():
-			try:
-				os.remove(j(desktop, item.name+'.lnk'))
-			except FileNotFoundError:
-				pass # os.remove can error if the file does not exist, which is obviously not a problem
+			# Remove default shortcut
+			safe_remove_shortcut(item.name)
+
+			# Check the config file for extra shortcuts to remove
+			config = json.load(open(j(archives_folder, item.name, 'config.json')))
+			if 'exes' in config:
+				for name, exe_def in config['exes'].items():
+					if 'name' in exe_def:
+						safe_remove_shortcut(exe_def['name'])
+					else:
+						safe_remove_shortcut(name)
+
 	# Use uninstaller bat file to delete the TriangleLAN folder
 	shutil.copyfile(uninstaller, j(root, 'uninstall.bat'))
 	subprocess.Popen([j(root, 'uninstall.bat')])

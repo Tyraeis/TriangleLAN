@@ -7,3 +7,4 @@ for /f %%i in (
 ) do "tools/RemoveDrive.exe" %%i: -L
 
 powershell "$wshell=New-Object -ComObject Wscript.Shell;$wshell.Popup('USB Drive is save to remove',5,'TriangleLAN',0)"
+exit
