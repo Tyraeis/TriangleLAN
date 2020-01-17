@@ -54,6 +54,10 @@ def uninstall():
 						safe_remove_shortcut(exe_def['name'])
 					else:
 						safe_remove_shortcut(name)
+			
+			# Run the uninstall script if given
+			if 'uninstall_script' in config:
+				subprocess.run([config['uninstall_script']])
 
 	# Use uninstaller bat file to delete the TriangleLAN folder
 	shutil.copyfile(uninstaller, j(root, 'uninstall.bat'))
